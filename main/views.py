@@ -13,9 +13,10 @@ from django.core.exceptions import ValidationError
 from django.db.models import FloatField, Sum
 from django.db.models.functions import Cast
 
-from .forms import BankCalculationForm
+from .forms import BankCalculationForm, BankCalculationHeadersForm, AddCompanyForm, CreateNewOperationForm, CreateMonthlyOperationForm
 from .models import BankCalculation, Card, Company, Operation, BankCalculationHeaders
 from .serializers import (BankCalculationSerializer, CardSerializer, CompanySerializer, OperationSerializer, BankCalculationHeadersSerializer)
+
 
 
 class CompanyList(APIView):
@@ -30,17 +31,50 @@ class CompanyList(APIView):
         return Response({'data': queryset, 'serializer': serializer})
 
 
+    def post(self, request):
+        if request.method == 'POST':
+            form = AddCompanyForm(request.POST or None)
+            if form.is_valid():
+                instance = form.save()
+                instance.save()
+                redirect('home')
+        else:
+            form = AddCompanyForm()
+        return Response({'form': form})    
+
+
+
 class OperationList(APIView):
     serializer_class = OperationSerializer
     template_name = 'operations_template.html'
     renderer_classes = [TemplateHTMLRenderer]
 
+    def get_object(self, pk):
+        try:
+            return Company.objects.get(id=pk)
+        except:
+            raise Http404
+
     def get(self, request, pk):
-        related_company = get_object_or_404(Company, id=pk)
+        related_company = self.get_object(pk)
         operations = Operation.objects.filter(related_company=related_company)
         serializer = OperationSerializer(operations, many=True)
         print(serializer.data)
         return Response({'operations': operations, 'related_company': related_company, 'serializer': serializer}) 
+
+
+    def post(self, request, pk):
+        related_company = self.get_object(pk)
+        
+        if request.method == 'POST':
+            form = CreateNewOperationForm(request.POST or None)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.related_company = related_company
+                instance.save()
+        else:
+            form = CreateNewOperationForm()
+        return Response({'form': form, 'related_company': related_company})    
 
 
 class CardList(APIView):
@@ -48,11 +82,30 @@ class CardList(APIView):
     template_name = 'cards.html'
     renderer_classes = [TemplateHTMLRenderer]
 
+    def get_object(self, pk):
+        try:
+            return Operation.objects.get(id=pk)
+        except:
+            raise Http404
+
     def get(self, request, pk):
-        related_operation = get_object_or_404(Operation, id=pk)
+        related_operation = self.get_object(pk)
         cards = Card.objects.filter(related_operation=related_operation)
         print(cards)
-        return Response({'related_operations': related_operation, 'cards': cards})
+        return Response({'related_operation': related_operation, 'cards': cards})
+
+    def post(self, request, pk):
+        related_operation = self.get_object(pk)
+        
+        if request.method == 'POST':
+            form = CreateMonthlyOperationForm(request.POST or None)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.related_operation = related_operation
+                instance.save()
+        else:
+            form = CreateMonthlyOperationForm()
+        return Response({'form': form, 'related_operation': related_operation})    
 
 
 class CreateFormView(APIView):
