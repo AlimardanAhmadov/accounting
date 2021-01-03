@@ -18,46 +18,6 @@ from .models import BankCalculation, Card, Company, Operation, BankCalculationHe
 from .serializers import (BankCalculationSerializer, CardSerializer, CompanySerializer, OperationSerializer, BankCalculationHeadersSerializer)
 
 
-class CompanyViewSet(viewsets.ModelViewSet):
-    serializer_class = CompanySerializer
-
-    def get_queryset(self, *args, **kwargs):
-        companies = Company.objects.all().order_by('-created')
-        return companies
-
-
-class OperationViewSet(viewsets.ModelViewSet):
-    serializer_class = OperationSerializer 
-
-    def get_queryset(self, *args, **kwargs):
-        queryset_operations = Operation.objects.filter(related_company_id=self.request.GET.get('related_company_pk'))
-        return queryset_operations
-
-
-class CardViewSet(viewsets.ModelViewSet):
-    serializer_class = CardSerializer
-
-    def get_queryset(self, *args, **kawrgs):
-        queryset_cards = Card.objects.filter(related_operation_id=self.request.GET.get('related_operation_pk'))
-        return queryset_cards
-
-
-class BankCalculationViewSet(viewsets.ModelViewSet):
-    serializer_class = BankCalculationSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        calculations = BankCalculation.objects.filter(related_card_id=self.request.GET.get('related_card_pk'))
-        return calculations
-
-
-class BankCalculationHeadersViewSet(viewsets.ModelViewSet):
-    serializer_class = BankCalculationHeadersSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        headers = BankCalculationHeaders.objects.filter(related_bank_operation_id=self.request.GET.get('related_bank_operation_pk'))
-        return headers
-
-
 class CompanyList(APIView):
     serializer_class = CompanySerializer
     template_name = 'companies.html'
