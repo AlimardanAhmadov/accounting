@@ -2,7 +2,12 @@
 
 
 {% block content %}
-
+<form action="{% url 'operations' related_company.id %}" method='POST'>
+    {% csrf_token %}
+    <label for="title">Əməliyyat Adı</label>
+    <input type="text" name="title" id="title">
+    <input type="file" name="image" id="">
+</form>
 {% for operation in operations %}
 
     <a href="{% url 'card_list' operation.id %}">{{ operation.title }}</a>
