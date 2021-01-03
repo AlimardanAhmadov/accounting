@@ -1,0 +1,15 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+    {% block content %}
+    <h2>Home</h2>
+    {% for company in data %}
+        <a href="{% url 'operations' company.id %}" style="text-decoration: none;">{{ company.name }} - {{ company.created }}</p>
+    {% endfor %}
+    {% endblock %}
+</body>
+</html>
