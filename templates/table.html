@@ -1,0 +1,43 @@
+{% extends 'companies.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<form action="{% url 'chosen_operation' related_card.id %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="instution_title" id="">
+    <input type="text" name="appointment" id="">
+    <input type="date" name="time" id="">
+    <input type="number" name="income_1" id="">
+    <input type="number" name="income_2" id="">
+    <input type="number" name="expense" id="">
+    <input type="number" name="expense_1" id="">
+    <input type="number" name="expense_2" id="">
+    <input type="number" name="expense_3" id="">
+    <input type="number" name="expense_4" id="">
+    <input type="number" name="expense_5" id="">
+    <input type="number" name="expense_6" id="">
+    <input type="number" name="expense_7" id="">
+    <input type="number" name="expense_8" id="">
+    <input type="number" name="expense_9" id="">
+    <input type="number" name="expense_10" id="">
+    <input type="number" name="expense_11" id="">
+    <input type="number" name="expense_12" id="">
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+
+<ul>
+    {% for detail in details %}
+        <li><a href="{% url 'api_update_view' detail.id %}">{{detail.instution_title}}</a></li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for header in headers %}
+        <li><a href="#">{{ header.num1 }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'companies.html' %}
+
+
+{% block content %}
+
+{% for operation in operations %}
+
+    <a href="{% url 'card_list' operation.id %}">{{ operation.title }}</a>
+
+{% endfor %}
+
+{% endblock %}
