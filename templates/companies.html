@@ -5,8 +5,14 @@
     <title>Homepage</title>
 </head>
 <body>
+    
     {% block content %}
     <h2>Home</h2>
+    <form action="{% url 'home' %}" method='POST'>
+        {% csrf_token %}
+        <label for="Name">Şirkət Adı</label>
+        <input type="text" name="name" id="Name">
+    </form>
     {% for company in data %}
         <a href="{% url 'operations' company.id %}" style="text-decoration: none;">{{ company.name }} - {{ company.created }}</p>
     {% endfor %}
