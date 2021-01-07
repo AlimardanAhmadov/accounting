@@ -1,6 +1,31 @@
 from django import forms
-from .models import BankCalculation, BankCalculationHeaders
+from .models import BankCalculation, BankCalculationHeaders, Company, Operation, Card
 
+
+class AddCompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+
+        fields = [
+            'name'
+        ]
+
+class CreateNewOperationForm(forms.ModelForm):
+    class Meta:
+        model = Operation
+
+        fields = [
+            'title', 'image',
+        ]
+
+
+class CreateMonthlyOperationForm(forms.ModelForm):
+    class Meta:
+        model = Card
+
+        fields = [
+            'card_title',
+        ]
 
 class BankCalculationForm(forms.ModelForm):
     class Meta:
