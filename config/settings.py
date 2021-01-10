@@ -27,7 +27,7 @@ SECRET_KEY = 'vu=*c6#@kipek14(y8s91mjyz_%2@im^tn@1u&-5osw6m=vxey'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,18 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'main',
     'user',
 
     'crispy_forms',
     'knox',
-    'rest_framework.authtoken',
+    'django_rest_passwordreset'
 ]
 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -96,10 +97,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'database_1', 
+        'USER': 'al1mardan', 
+        'PASSWORD': 'apple_2001',
+        'HOST': 'database-1.c7bzeuymni0m.us-east-2.rds.amazonaws.com', 
+        'PORT': '5432',
     }
 }
 
@@ -149,5 +155,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False
 }
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
